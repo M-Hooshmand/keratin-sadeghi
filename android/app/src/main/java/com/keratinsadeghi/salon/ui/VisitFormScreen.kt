@@ -78,6 +78,18 @@ fun VisitFormScreen(
     var finalAmount by remember {
         mutableStateOf(existing?.finalAmount?.takeIf { it > 0 }?.toString().orEmpty())
     }
+    var duration by remember {
+        mutableStateOf(existing?.durationMinutes?.takeIf { it > 0 }?.toString().orEmpty())
+    }
+    var withAssistant by remember {
+        mutableStateOf((existing?.assistantCount ?: 0) > 0)
+    }
+    var assistantCount by remember {
+        mutableStateOf(existing?.assistantCount?.takeIf { it > 0 }?.toString() ?: "1")
+    }
+    var assistantCost by remember {
+        mutableStateOf(existing?.assistantCost?.takeIf { it > 0 }?.toString().orEmpty())
+    }
     var hairLength by remember {
         mutableStateOf(existing?.hairLengthCm?.let { formatDecimal(it).replace("٫", ".") } ?: "")
     }
@@ -106,7 +118,8 @@ fun VisitFormScreen(
         ((material?.pricePerUnit ?: 0L) * parseDouble(row.amount)).toLong()
     }
     val amountValue = parseNumber(finalAmount)
-    val profit = amountValue - materialCost
+    val assistantCostValue = if (withAssistant) parseNumber(assistantCost) else 0L
+    val profit = amountValue - materialCost - assistantCostValue
 
     if (appointment == null) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
@@ -155,6 +168,53 @@ fun VisitFormScreen(
                     onClick = { showDate = true },
                     modifier = Modifier.fillMaxWidth(),
                 )
+                Spacer(Modifier.height(9.dp))
+                LabeledField(
+                    label = "مدت زمان انجام کار (دقیقه)",
+                    value = duration,
+                    onValueChange = { duration = it },
+                    keyboardType = KeyboardType.Number,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    "نفرات انجام کار",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = SalonColors.Muted,
+                )
+                Spacer(Modifier.height(5.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    StaffOption("یک‌نفره", !withAssistant) {
+                        withAssistant = false
+                        assistantCount = "1"
+                        assistantCost = ""
+                    }
+                    StaffOption("با دستیار", withAssistant) { withAssistant = true }
+                }
+                if (withAssistant) {
+                    Spacer(Modifier.height(8.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        LabeledField(
+                            label = "تعداد دستیار",
+                            value = assistantCount,
+                            onValueChange = { assistantCount = it },
+                            keyboardType = KeyboardType.Number,
+                            modifier = Modifier.weight(1f),
+                        )
+                        LabeledField(
+                            label = "هزینه دستیار (تومان)",
+                            value = assistantCost,
+                            onValueChange = { assistantCost = it },
+                            keyboardType = KeyboardType.Number,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                    Text(
+                        "هزینه دستیار را بر اساس مبلغ پرداختی همان کار وارد کنید؛ در سود کسر می‌شود.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = SalonColors.Muted,
+                    )
+                }
                 Spacer(Modifier.height(9.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     LabeledField(
@@ -325,6 +385,7 @@ fun VisitFormScreen(
                 Text("جمع‌بندی", style = MaterialTheme.typography.titleMedium, color = SalonColors.Ink)
                 Spacer(Modifier.height(6.dp))
                 SummaryLine("هزینه مواد", if (splitEnd) "ندارد" else formatToman(materialCost))
+                SummaryLine("هزینه دستیار", if (withAssistant) formatToman(assistantCostValue) else "ندارد")
                 SummaryLine("درآمد نهایی", formatToman(amountValue))
                 SummaryLine("سود ناخالص", formatToman(profit), SalonColors.MintDeep)
             }
@@ -337,6 +398,15 @@ fun VisitFormScreen(
                 onClick = {
                     error = null
                     val length = parseDouble(hairLength)
+                    val assistants = if (withAssistant) parseNumber(assistantCount).toInt() else 0
+                    if (withAssistant && assistants < 1) {
+                        error = "تعداد دستیار را وارد کنید"
+                        return@PinkButton
+                    }
+                    if (withAssistant && parseNumber(assistantCost) < 0) {
+                        error = "هزینه دستیار نمی‌تواند منفی باشد"
+                        return@PinkButton
+                    }
                     if (splitEnd && length <= 0) {
                         error = "برای موخوره‌گیری، قد مو الزامی است"
                         return@PinkButton
@@ -353,6 +423,9 @@ fun VisitFormScreen(
                         serviceId = serviceId,
                         performedDate = performedDate,
                         finalAmount = amountValue,
+                        durationMinutes = parseNumber(duration).toInt().takeIf { it > 0 },
+                        assistantCount = assistants,
+                        assistantCost = if (withAssistant) parseNumber(assistantCost) else 0L,
                         hairLengthCm = length.takeIf { it > 0 },
                         hairVolume = hairVolume.ifBlank { null },
                         hairCondition = hairCondition,
@@ -399,6 +472,23 @@ fun VisitFormScreen(
                 onSaved()
             },
             onDismiss = { showDelete = false },
+        )
+    }
+}
+
+@Composable
+private fun StaffOption(text: String, selected: Boolean, onClick: () -> Unit) {
+    Box(
+        Modifier
+            .clip(RoundedCornerShape(50))
+            .background(if (selected) SalonColors.RoseDeep else SalonColors.Blush)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 18.dp, vertical = 9.dp),
+    ) {
+        Text(
+            text,
+            style = MaterialTheme.typography.labelMedium,
+            color = if (selected) Color.White else SalonColors.RoseDeep,
         )
     }
 }

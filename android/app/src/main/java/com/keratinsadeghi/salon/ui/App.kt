@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -49,6 +50,13 @@ fun AppRoot() {
     val db = remember { Database(context.applicationContext) }
     val stack = remember { mutableStateListOf<Screen>(Screen.Dashboard) }
     var version by remember { mutableIntStateOf(0) }
+    var unlocked by remember { mutableStateOf(false) }
+    if (!unlocked) {
+        AppBackground {
+            AuthScreen(db = db, onAuthenticated = { unlocked = true })
+        }
+        return
+    }
     val current = stack.last()
 
     fun openTab(screen: Screen) {
@@ -128,6 +136,11 @@ fun AppRoot() {
                             onNewAppointment = { push(Screen.AppointmentForm()) },
                             onOpenAppointment = { push(Screen.AppointmentForm(it)) },
                             onVisit = { push(Screen.VisitForm(it)) },
+                            onLogout = {
+                                stack.clear()
+                                stack.add(Screen.Dashboard)
+                                unlocked = false
+                            },
                         )
 
                         Screen.Appointments -> AppointmentsScreen(

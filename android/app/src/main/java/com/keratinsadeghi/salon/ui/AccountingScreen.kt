@@ -54,8 +54,9 @@ fun AccountingScreen(db: Database) {
     val materials = remember(year) { db.materialBreakdown(year) }
     val income = months.sumOf { it.income }
     val materialCost = months.sumOf { it.materialCost }
+    val assistantCost = months.sumOf { it.assistantCost }
     val deposits = months.sumOf { it.deposit }
-    val profit = income - materialCost
+    val profit = income - materialCost - assistantCost
     val visits = months.sumOf { it.visits }
     val maxIncome = (months.maxOfOrNull { it.income } ?: 0L).coerceAtLeast(1L)
 
@@ -67,7 +68,7 @@ fun AccountingScreen(db: Database) {
     ) {
         GradientHeader(
             title = "حسابداری",
-            subtitle = "درآمد، هزینه مواد و سود به تفکیک ماه شمسی",
+            subtitle = "درآمد، هزینه مواد، دستیار و سود به تفکیک ماه شمسی",
             eyebrow = "SALON LEDGER",
         )
         Column(Modifier.padding(16.dp)) {
@@ -110,15 +111,16 @@ fun AccountingScreen(db: Database) {
             Spacer(Modifier.height(9.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
                 StatCard(
-                    icon = Icons.Default.List,
-                    label = "سود ناخالص",
-                    value = formatToman(profit),
+                    icon = Icons.Default.Build,
+                    label = "هزینه دستیار",
+                    value = formatToman(assistantCost),
                     modifier = Modifier.weight(1f),
                 )
                 StatCard(
-                    icon = Icons.Default.Build,
-                    label = "بیعانه‌های ثبت‌شده",
-                    value = formatToman(deposits),
+                    icon = Icons.Default.List,
+                    label = "سود ناخالص",
+                    value = formatToman(profit),
+                    note = "بیعانه ثبت‌شده ${formatToman(deposits)}",
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -132,22 +134,24 @@ fun AccountingScreen(db: Database) {
             }
 
             Spacer(Modifier.height(18.dp))
-            SectionTitle("جزئیات ماه‌ها", hint = "درآمد، هزینه مواد و سود")
+            SectionTitle("جزئیات ماه‌ها", hint = "درآمد، مواد، دستیار و سود")
             PinCard(Modifier.fillMaxWidth(), padding = androidx.compose.foundation.layout.PaddingValues(10.dp)) {
                 Row(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
-                    TableHead("ماه", 1.1f)
-                    TableHead("کار", 0.6f)
-                    TableHead("درآمد", 1.2f)
-                    TableHead("مواد", 1.0f)
-                    TableHead("سود", 1.0f)
+                    TableHead("ماه", 0.95f)
+                    TableHead("کار", 0.45f)
+                    TableHead("درآمد", 1.05f)
+                    TableHead("مواد", 0.85f)
+                    TableHead("دستیار", 0.85f)
+                    TableHead("سود", 0.85f)
                 }
                 months.forEach { month ->
                     Row(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
-                        TableCell(MONTH_NAMES[month.jm - 1], 1.1f, bold = true)
-                        TableCell(toPersianDigits(month.visits.toString()), 0.6f)
-                        TableCell(formatNumber(month.income), 1.2f)
-                        TableCell(formatNumber(month.materialCost), 1.0f)
-                        TableCell(formatNumber(month.profit), 1.0f, color = SalonColors.MintDeep)
+                        TableCell(MONTH_NAMES[month.jm - 1], 0.95f, bold = true)
+                        TableCell(toPersianDigits(month.visits.toString()), 0.45f)
+                        TableCell(formatNumber(month.income), 1.05f)
+                        TableCell(formatNumber(month.materialCost), 0.85f)
+                        TableCell(formatNumber(month.assistantCost), 0.85f)
+                        TableCell(formatNumber(month.profit), 0.85f, color = SalonColors.MintDeep)
                     }
                 }
             }
@@ -206,7 +210,7 @@ private fun MonthRow(month: MonthSummary, maxIncome: Long) {
                 )
             }
             Text(
-                "درآمد ${formatToman(month.income)} · سود ${formatToman(month.profit)}",
+                "درآمد ${formatToman(month.income)} · دستیار ${formatToman(month.assistantCost)} · سود ${formatToman(month.profit)}",
                 style = MaterialTheme.typography.bodySmall,
                 color = SalonColors.Muted,
             )

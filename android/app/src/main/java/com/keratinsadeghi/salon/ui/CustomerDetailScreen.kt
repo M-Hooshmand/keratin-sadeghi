@@ -271,6 +271,18 @@ fun CustomerDetailScreen(
                                     color = SalonColors.Muted,
                                 )
                                 Spacer(Modifier.height(5.dp))
+                                val duration = visit.durationMinutes?.let { "مدت ${toPersianDigits(it.toString())} دقیقه" }
+                                    ?: "مدت ثبت نشده"
+                                val staff = if (visit.assistantCount > 0) {
+                                    "${toPersianDigits(visit.staffCount.toString())} نفره · ${toPersianDigits(visit.assistantCount.toString())} دستیار"
+                                } else {
+                                    "یک‌نفره"
+                                }
+                                Text(
+                                    "$duration · $staff",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = SalonColors.Muted,
+                                )
                                 val length = visit.hairLengthCm?.let {
                                     "قد مو ${toPersianDigits(it.toInt().toString())} سانتی‌متر"
                                 } ?: "قد مو ثبت نشده"
@@ -295,7 +307,9 @@ fun CustomerDetailScreen(
                                     )
                                 }
                                 Text(
-                                    "هزینه مواد ${formatToman(visit.materialCost)} · سود ${formatToman(visit.finalAmount - visit.materialCost)}",
+                                    "مواد ${formatToman(visit.materialCost)} · دستیار ${formatToman(visit.assistantCost)} · سود ${
+                                        formatToman(visit.finalAmount - visit.materialCost - visit.assistantCost)
+                                    }",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = SalonColors.MintDeep,
                                 )

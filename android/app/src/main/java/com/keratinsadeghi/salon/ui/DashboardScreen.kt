@@ -63,6 +63,7 @@ fun DashboardScreen(
     onNewAppointment: () -> Unit,
     onOpenAppointment: (Long) -> Unit,
     onVisit: (Long) -> Unit,
+    onLogout: () -> Unit,
 ) {
     val today = todayIso()
     val jalaliToday = todayJalali()
@@ -103,6 +104,17 @@ fun DashboardScreen(
                         ),
                     ),
             )
+            Box(
+                Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(Color.White.copy(alpha = 0.2f))
+                    .clickable(onClick = onLogout)
+                    .padding(horizontal = 12.dp, vertical = 7.dp),
+            ) {
+                Text("خروج", color = Color.White, style = MaterialTheme.typography.labelMedium)
+            }
             Column(
                 Modifier
                     .align(Alignment.TopStart)
