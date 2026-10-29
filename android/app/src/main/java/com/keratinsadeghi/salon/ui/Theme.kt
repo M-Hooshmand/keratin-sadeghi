@@ -6,7 +6,10 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -16,21 +19,21 @@ import androidx.compose.ui.unit.sp
 import com.keratinsadeghi.salon.R
 
 object SalonColors {
-    val Ivory = Color(0xFFFFF4FA)
-    val Cream = Color(0xFFFFFAFD)
-    val Ink = Color(0xFF3B2030)
-    val Muted = Color(0xFFA07891)
-    val Rose = Color(0xFFF06FA8)
-    val RoseDeep = Color(0xFFA82A66)
-    val Hot = Color(0xFFFF2C92)
-    val Bubble = Color(0xFFFF8FC4)
-    val Blush = Color(0xFFFFE3F1)
-    val Line = Color(0xFFF7CFE2)
-    val Lilac = Color(0xFFF3E3FF)
-    val Mint = Color(0xFFE8F7EF)
-    val MintDeep = Color(0xFF2F6B4F)
-    val Danger = Color(0xFF9B2C45)
-    val DangerBg = Color(0xFFFFE8EE)
+    val Ivory = Color(0xFFFBF4E6)
+    val Cream = Color(0xFFFFFCF5)
+    val Ink = Color(0xFF3E3022)
+    val Muted = Color(0xFF8A765C)
+    val Rose = Color(0xFFC9A24B)
+    val RoseDeep = Color(0xFF7A5624)
+    val Hot = Color(0xFFA67C2E)
+    val Bubble = Color(0xFFE8D3A8)
+    val Blush = Color(0xFFF6E8CE)
+    val Line = Color(0xFFE8D8BB)
+    val Lilac = Color(0xFFF3EADB)
+    val Mint = Color(0xFFEAF0E1)
+    val MintDeep = Color(0xFF4D6B3A)
+    val Danger = Color(0xFF9B3B3B)
+    val DangerBg = Color(0xFFFBE9E7)
 }
 
 val Vazirmatn = FontFamily(
@@ -130,10 +133,12 @@ private val AppShapes = Shapes(
 
 @Composable
 fun KeratinTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
-        colorScheme = Colors,
-        typography = AppTypography,
-        shapes = AppShapes,
-        content = content,
-    )
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        MaterialTheme(
+            colorScheme = Colors,
+            typography = AppTypography,
+            shapes = AppShapes,
+            content = content,
+        )
+    }
 }

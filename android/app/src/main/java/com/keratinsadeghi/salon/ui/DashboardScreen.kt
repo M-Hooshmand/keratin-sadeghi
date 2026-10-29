@@ -97,9 +97,9 @@ fun DashboardScreen(
                     .background(
                         Brush.verticalGradient(
                             listOf(
-                                Color(0xFF4B0D2B).copy(alpha = 0.86f),
-                                Color(0xFFA8215D).copy(alpha = 0.62f),
-                                Color(0xFFFF4FA5).copy(alpha = 0.3f),
+                                Color(0xFF3E2A12).copy(alpha = 0.86f),
+                                Color(0xFF6F5124).copy(alpha = 0.62f),
+                                Color(0xFFB08A3E).copy(alpha = 0.3f),
                             ),
                         ),
                     ),

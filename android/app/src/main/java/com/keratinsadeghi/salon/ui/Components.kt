@@ -91,7 +91,7 @@ fun AppBackground(content: @Composable () -> Unit) {
                 Brush.verticalGradient(
                     colors = listOf(
                         SalonColors.Ivory,
-                        Color(0xFFFFF8FC),
+                        Color(0xFFFFF9ED),
                         SalonColors.Lilac.copy(alpha = 0.45f),
                     ),
                 ),
@@ -135,7 +135,7 @@ fun GradientHeader(
             .clip(RoundedCornerShape(bottomStart = 34.dp, bottomEnd = 34.dp))
             .background(
                 Brush.linearGradient(
-                    listOf(Color(0xFF4B0D2B), Color(0xFFA8215D), Color(0xFFFF4FA5)),
+                    listOf(Color(0xFF3E2A12), Color(0xFF6F5124), Color(0xFFB08A3E)),
                 ),
             )
             .statusBarsPadding()
@@ -294,7 +294,7 @@ fun PinkButton(
             .clip(CircleShape)
             .background(
                 if (enabled) Brush.horizontalGradient(listOf(SalonColors.Hot, SalonColors.RoseDeep))
-                else Brush.horizontalGradient(listOf(Color(0xFFE7BFD2), Color(0xFFD6A4BC))),
+                else Brush.horizontalGradient(listOf(Color(0xFFDCC9A6), Color(0xFFCBB488))),
             )
             .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 18.dp, vertical = 11.dp),

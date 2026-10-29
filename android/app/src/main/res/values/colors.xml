@@ -1,11 +1,11 @@
 <resources>
-    <color name="ivory">#FFF4FA</color>
-    <color name="ink">#3B2030</color>
-    <color name="muted">#A07891</color>
-    <color name="rose">#F06FA8</color>
-    <color name="rosedeep">#A82A66</color>
-    <color name="hot">#FF2C92</color>
-    <color name="blush">#FFE3F1</color>
-    <color name="line">#F7CFE2</color>
-    <color name="lilac">#F3E3FF</color>
+    <color name="ivory">#FBF4E6</color>
+    <color name="ink">#3E3022</color>
+    <color name="muted">#8A765C</color>
+    <color name="rose">#C9A24B</color>
+    <color name="rosedeep">#7A5624</color>
+    <color name="hot">#A67C2E</color>
+    <color name="blush">#F6E8CE</color>
+    <color name="line">#E8D8BB</color>
+    <color name="lilac">#F3EADB</color>
 </resources>
