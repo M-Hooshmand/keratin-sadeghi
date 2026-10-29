@@ -1,0 +1,10 @@
+<resources>
+    <style name="Theme.Keratin" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">@font/vazirmatn_regular</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/ivory</item>
+        <item name="android:navigationBarColor">@color/ivory</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:colorAccent">@color/hot</item>
+    </style>
+</resources>

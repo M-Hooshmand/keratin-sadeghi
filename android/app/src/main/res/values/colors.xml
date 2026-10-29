@@ -1,0 +1,11 @@
+<resources>
+    <color name="ivory">#FFF4FA</color>
+    <color name="ink">#3B2030</color>
+    <color name="muted">#A07891</color>
+    <color name="rose">#F06FA8</color>
+    <color name="rosedeep">#A82A66</color>
+    <color name="hot">#FF2C92</color>
+    <color name="blush">#FFE3F1</color>
+    <color name="line">#F7CFE2</color>
+    <color name="lilac">#F3E3FF</color>
+</resources>
