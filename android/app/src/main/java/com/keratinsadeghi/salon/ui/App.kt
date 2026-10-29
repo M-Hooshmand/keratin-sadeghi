@@ -2,6 +2,7 @@ package com.keratinsadeghi.salon.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
@@ -124,7 +125,7 @@ fun AppRoot() {
                 }
             },
         ) { padding ->
-            Box(Modifier.padding(padding)) {
+            Box(Modifier.padding(padding).imePadding()) {
                 key(version) {
                     when (val screen = current) {
                         Screen.Dashboard -> DashboardScreen(
